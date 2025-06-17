@@ -1,0 +1,44 @@
+﻿@model WebApplication1.Models.BorrowModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h2>ثبت امانت کتاب</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-action="Create" method="post">
+
+    <div class="form-group">
+        <label asp-for="PersonId"></label>
+        <select asp-for="PersonId" class="form-control"
+                asp-items="@(new SelectList(ViewBag.Persons, "PersonId", "LastName"))">
+            <option value="">Choise Person</option>
+        </select>
+        <span asp-validation-for="PersonId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BookId"></label>
+        <select asp-for="BookId" class="form-control"
+                asp-items="@(new SelectList(ViewBag.Books, "BookId", "Title"))">
+            <option value="">Choise Book</option>
+        </select>
+        <span asp-validation-for="BookId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Borrow</button>
+
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

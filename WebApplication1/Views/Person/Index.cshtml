@@ -1,0 +1,56 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<WebApplication1.Models.PersonModel>
+
+<a asp-controller="Person" asp-action="Create" class="btn btn-primary">Create Person</a>
+<a asp-controller="Borrow" asp-action="Create" class="btn btn btn-info">Borrow Book</a>
+<br />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">NationalCode </th>
+            <th scope="col">phoneNumber </th>
+            <th scope="col">Edit</th>
+            <th scope="col">delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int row = 1;
+            foreach (var person in Model)
+            {
+                <tr>
+                    <th scope="row">@row</th>
+                    <td>@person.FirstName</td>
+                    <td>@person.LastName</td>
+                    <td>@person.NationalCode</td>
+                    <td>@person.phoneNumber</td>
+                    <td>
+                        <a asp-controller="Person" asp-action="Edit" asp-route-id="@person.PersonId" class="btn btn-warning">Edit</a>
+                    </td>
+                    <td>
+                        <form asp-controller="Person" asp-action="Delete" asp-route-id="@person.PersonId" method="post" onsubmit="return confirm('Are you sure you want to delete this person?');">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    <td>
+                </tr>
+                row++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center text-danger">There is no person to display..</td>
+            </tr>
+        }
+    </tbody>
+</table>
