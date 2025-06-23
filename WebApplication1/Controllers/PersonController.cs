@@ -72,6 +72,7 @@ namespace WebApplication1.Controllers
 
             if (ModelState.IsValid)
             {
+
                 _context.Update(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
