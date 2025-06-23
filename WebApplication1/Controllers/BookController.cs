@@ -1,22 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Repositories;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
     public class BookController : Controller
     {
         private readonly Context _context;
-        
-        public BookController(Context context)
+        private readonly IBookRepository _bookRepository;
+        public BookController(Context context, IBookRepository bookRepository)
         {
             _context = context;
+            _bookRepository = bookRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Books.ToListAsync());
+            return View(await _bookRepository.GetAll());
         }
 
         [HttpGet]
@@ -26,37 +29,35 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(BookModel book)
+        public async Task<IActionResult> Create(BookCreeateVm book)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(book);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var result = _bookRepository.Add(book);
             }
             return View(book);
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null) return NotFound();
 
-            var book = await _context.Books.FindAsync(id);
+            var book = await _bookRepository.FindById(id);
             if (book == null) return NotFound();
 
             return View(book);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, BookModel book)
+        public async Task<IActionResult> Edit(int id, BookEditVm book)
         {
             if (id != book.BookId) return NotFound();
 
             if (ModelState.IsValid)
             {
-                _context.Update(book);
-                await _context.SaveChangesAsync();
+                await _bookRepository.Edit(book);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -64,11 +65,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null) return NotFound();
 
-            var book = await _context.Books.FindAsync(id);
+            var book = await _bookRepository.FindById(id);
             if (book == null) return NotFound();
 
             return View(book);
@@ -77,14 +78,14 @@ namespace WebApplication1.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Books.FindAsync(id);
+            var book = await _bookRepository.FindById(id);
             if (book != null)
             {
-                _context.Books.Remove(book);
-                await _context.SaveChangesAsync();
+                await _bookRepository.Delete(id);
             }
 
             return RedirectToAction(nameof(Index));
         }
     }
 }
+

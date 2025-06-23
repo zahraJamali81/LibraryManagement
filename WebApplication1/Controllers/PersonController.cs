@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -18,7 +19,6 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //return View(await _context.Persons.ToListAsync());
             return View(await _personRepository.GetAll());
         }
 
@@ -29,15 +29,13 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PersonModel person)
+        public async Task<IActionResult> Create(PersonCreateVm person)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Add(person);
-                    await _context.SaveChangesAsync();
-                    //var result = await _personRepository.Add(person)
+                    var result = await _personRepository.Add(person);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -55,26 +53,25 @@ namespace WebApplication1.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null) return NotFound();
 
-            var person = await _context.Persons.FindAsync(id);
+            var person = await _personRepository.FindById(id);
             if (person == null) return NotFound();
 
             return View(person);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, PersonModel person)
+        public async Task<IActionResult> Edit(int id, PersonEditVm person)
         {
             if (id != person.PersonId) return NotFound();
 
             if (ModelState.IsValid)
             {
 
-                _context.Update(person);
-                await _context.SaveChangesAsync();
+                await _personRepository.Edit(person);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -82,11 +79,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null) return NotFound();
 
-            var person = await _context.Persons.FindAsync(id);
+            var person = await _personRepository.FindById(id);
             if (person == null) return NotFound();
 
             return View(person);
@@ -95,11 +92,10 @@ namespace WebApplication1.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var person = await _personRepository.FindById(id);
             if (person != null)
             {
-                _context.Persons.Remove(person);
-                await _context.SaveChangesAsync();
+                _personRepository.Delete(id);
             }
 
             return RedirectToAction(nameof(Index));
