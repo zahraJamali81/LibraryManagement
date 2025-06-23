@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -16,7 +17,15 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.Persons = _context.Persons.ToList();
+            ViewBag.Persons = _context.Persons
+                .AsNoTracking()
+                .Select(s=> new PersonVm
+                {
+                    PersonId = s.PersonId,
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    phoneNumber = s.phoneNumber,
+                }).ToList();
             ViewBag.Books = _context.Books.Where(b => b.CopiesAvailable > 0).ToList();
             return View(new BorrowModel());
         }

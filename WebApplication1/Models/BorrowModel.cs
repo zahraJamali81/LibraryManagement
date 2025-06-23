@@ -8,11 +8,11 @@ namespace WebApplication1.Models
     {
         [Required]
         public int? PersonId { get; set; }
-        public PersonModel Person { get; set; }
+        public PersonModel? Person { get; set; }
 
         [Required]
         public int? BookId { get; set; }
-        public BookModel Book { get; set; }
+        public BookModel? Book { get; set; }
 
         public DateTime BorrowDate { get; set; }
         public DateTime ReternDate { get; set; }

@@ -20,7 +20,7 @@
     <div class="form-group">
         <label asp-for="PersonId"></label>
         <select asp-for="PersonId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Persons, "PersonId", "LastName"))">
+                asp-items="@(new SelectList(ViewBag.Persons, "PersonId", "FullName"))">
             <option value="">Choise Person</option>
         </select>
         <span asp-validation-for="PersonId" class="text-danger"></span>
@@ -33,6 +33,16 @@
             <option value="">Choise Book</option>
         </select>
         <span asp-validation-for="BookId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <lable >تاریخ امانت</lable>
+        <input type="date" asp-for="BorrowDate" />
+    </div>
+
+    <div class="form-group">
+        <lable>تاریخ بازگشت</lable>
+        <input type="date" asp-for="ReternDate" />
     </div>
 
     <button type="submit" class="btn btn-primary">Borrow</button>

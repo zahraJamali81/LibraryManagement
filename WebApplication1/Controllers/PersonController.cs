@@ -1,22 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
+using WebApplication1.Repositories;
 
 namespace WebApplication1.Controllers
 {
     public class PersonController : Controller
     {
         private readonly Context _context;
-
-        public PersonController(Context context)
+        private readonly IPersonRepository _personRepository;
+        public PersonController(Context context, IPersonRepository personRepository)
         {
             _context = context;
+            _personRepository = personRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Persons.ToListAsync());
+            //return View(await _context.Persons.ToListAsync());
+            return View(await _personRepository.GetAll());
         }
 
         [HttpGet]
@@ -34,6 +37,7 @@ namespace WebApplication1.Controllers
                 {
                     _context.Add(person);
                     await _context.SaveChangesAsync();
+                    //var result = await _personRepository.Add(person)
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
