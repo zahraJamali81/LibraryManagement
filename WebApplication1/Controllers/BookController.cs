@@ -34,6 +34,7 @@ namespace WebApplication1.Controllers
             if (ModelState.IsValid)
             {
                 var result = _bookRepository.Add(book);
+                return RedirectToAction(nameof(Index));
             }
             return View(book);
         }

@@ -4,6 +4,7 @@ namespace WebApplication1.ViewModels
 {
     public class BookVm
     {
+        public int BookId { get; set; }
         [Required]
         [MaxLength(100)]
         public string Title { get; set; }
@@ -13,6 +14,7 @@ namespace WebApplication1.ViewModels
         [Required]
         [MaxLength(100)]
         public string Author { get; set; }
+        public int CopiesAvailable { get; set; }
         public bool Status { get; set; }
     }
 }

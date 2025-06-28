@@ -40,6 +40,7 @@ namespace WebApplication1.Repositories
             {
                 return false;
             }
+
             book.BookId = bookEditVm.BookId;
             book.Author = bookEditVm.Author;
             book.Title = bookEditVm.Title;
@@ -60,12 +61,13 @@ namespace WebApplication1.Repositories
                     Title = s.Title,
                     Subject = s.Subject,
                     Author = s.Author,
-                    Status = s.Status
+                    Status = s.Status,
+                    CopiesAvailable = s.CopiesAvailable
                 })
                 .SingleOrDefaultAsync();
         }
 
-    public async Task<List<BookVm>> GetAll()
+        public async Task<List<BookVm>> GetAll()
         {
             return await _context.Books.AsNoTracking()
                 .Select(s => new BookVm

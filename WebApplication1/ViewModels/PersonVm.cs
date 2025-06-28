@@ -14,9 +14,17 @@ namespace WebApplication1.ViewModels
 
         public string FullName => $"{FirstName} {LastName}";
 
-        [Required]
+        [Required(ErrorMessage = "کد ملی ضروری است")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "کد ملی باید 10 رقم باشد")]
+        [MaxLength(10)]
+        public string NationalCode { get; set; }
+
+        [Phone(ErrorMessage = "شماره تلفن نامعتبر است")]
         [MaxLength(11)]
         public string phoneNumber { get; set; }
+
+        [MaxLength(500)]
+        public string Address { get; set; }
 
     }
 }

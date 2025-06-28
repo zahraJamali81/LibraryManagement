@@ -13,6 +13,7 @@ builder.Services.AddDbContext<Context>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 
 var app = builder.Build();
 
